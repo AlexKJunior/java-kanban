@@ -1,3 +1,7 @@
+import model.EpicTask;
+import model.Manager;
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 //«Трекер задач»
