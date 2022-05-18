@@ -3,61 +3,57 @@ package model;
 import java.util.Objects;
 
 public class Task {
-    private int id;
-    private final String name;
-    private final String description;
-    private Enum status;
+    protected int id;
+    protected String name;
+    protected String description;
+    protected Status status;
 
-    public Task(String nameTask, String descriptionTask, String statusTask) {
-        this.name = nameTask;
-        this.description = descriptionTask;
-
+    public Task(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
-     public Task(String nameTask, String descriptionTask) {
-
-        this.name = nameTask;
-        this.description = descriptionTask;
-    }
-
-    public Task (Task task) {
-        this(task.name, task.description, String.valueOf(task.status));
-    }
-
-     public int getId() {
+    public int getId() {
         return id;
     }
 
-     public String getName() {
+    public String getName() {
         return name;
     }
 
-     public String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-     public Enum getStatus() {
+    public Status getStatus() {
         return status;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
-   public boolean equals(Object o) {
-       if (this == o) return true;
-       if (o == null || getClass() != o.getClass()) return false;
-       Task task = (Task) o;
-       return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.getDescription ())
-               && Objects.equals(status, task.status);
-   }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(name, task.name)
+                && Objects.equals(description, task.description) && status == task.status;
+    }
 
-   @Override
-   public int hashCode() {
-       return Objects.hash(id, name, description, status);
-   }
-
-   @Override
-  public String toString() {
-      return "ID задачи Task=\"" + id + "\", Название задачи=\"" + name + "\", Описание=\"" + description
-              + "\", Статус=\"" + status + "\"";
-  }
-
+    @Override
+    public int hashCode () {
+        return Objects.hash ( id, name, description, status );
+    }
+    @Override
+    public String toString () {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }
