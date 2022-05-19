@@ -2,11 +2,10 @@ package InMemory.Interface;
 
 import model.Task;
 
-import java.util.ArrayList;
-
-public interface HistoryManager {
+public interface HistoryManager<T> {
+    HistoryManager<Task> getHistory();
 
     void add(Task task);
 
-    ArrayList<Task> getHistory();
+
 }

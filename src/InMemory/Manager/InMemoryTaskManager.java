@@ -8,18 +8,18 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InMemoryTaskManager implements TaskManager {
+public abstract class InMemoryTaskManager<T> implements TaskManager {
     private static int uniqueTaskId = 0;
     private final HashMap<Integer, Task> taskList;
     private final HashMap<Integer, SubTask> subTaskList;
     private final HashMap<Integer, Epic> epicList;
-    HistoryManager historyManager;
+    private final HistoryManager<T> historyManager;
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
         this.subTaskList = new HashMap<>();
         this.epicList = new HashMap<>();
-        historyManager = Managers.getDefaultHistory();
+        this.historyManager = Managers.getDefaultHistory();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTaskByNewTask(Task task) {
         if (taskList.containsKey(task.getId())) {
-            taskList.replace ( task.getId (), task );
+            taskList.replace (task.getId(), task);
         }
     }
 
@@ -123,7 +123,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(Integer id) {
-        taskList.remove ( id );
+        taskList.remove (id);
     }
 
     @Override
@@ -136,13 +136,8 @@ public class InMemoryTaskManager implements TaskManager {
                     return;
                 }
             }
-            epicList.remove ( id );
+            epicList.remove (id);
         }
-    }
-
-    @Override
-    public ArrayList<Task> getHistory() {
-        return historyManager.getHistory();
     }
 
     private Status checkEpicStatus(ArrayList<Integer> subTaskIdList) {

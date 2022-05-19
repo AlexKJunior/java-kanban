@@ -1,35 +1,36 @@
 package InMemory.Interface;
 
-import model.*;
+import model.Epic;
+import model.SubTask;
+import model.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface TaskManager {
 
-    Task creationOfTask(Task task);
+    HistoryManager<Task> getHistory();
 
-    Epic creationOfEpic(Epic epic);
+    Task creationOfTask (Task task);
 
-    SubTask creationOfSubTask(SubTask subTask);
+    Epic creationOfEpic (Epic epic);
 
-    HashMap<Integer, Task> getListOfAllTasks();
+    SubTask creationOfSubTask (SubTask subTask);
 
-    HashMap<Integer, Epic> getListOfEpics();
+    Task getTaskById (Integer id);
 
-    Task getTaskById(Integer id);
+    Epic getEpicById (Integer id);
 
-    Epic getEpicById(Integer id);
+    SubTask getSubTaskById (Integer id);
 
-    SubTask getSubTaskById(Integer id);
+    HashMap<Integer, Task> getListOfAllTasks ();
 
-    void updateTaskByNewTask(Task task);
+    HashMap<Integer, Epic> getListOfEpics ();
 
-    void updateSubTaskByNewSubTask(SubTask subTask);
+    void updateTaskByNewTask (Task task);
 
-    void deleteTaskById(Integer id);
+    void updateSubTaskByNewSubTask (SubTask subTask);
 
-    void deleteEpicById(Integer id);
+    void deleteTaskById (Integer id);
 
-    ArrayList<Task> getHistory();
+    void deleteEpicById (Integer id);
 }
