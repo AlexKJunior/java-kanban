@@ -4,19 +4,13 @@ import InMemory.Interface.HistoryManager;
 import InMemory.Interface.TaskManager;
 import InMemory.Manager.InMemoryHistoryManager;
 import InMemory.Manager.InMemoryTaskManager;
-import model.Task;
 
 public class Managers {
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager () {
-            @Override
-            public HistoryManager<Task> getHistory () {
-                return null;
-            }
-        };
+        return new InMemoryTaskManager ();
     }
 
-    public static <T> HistoryManager<T> getDefaultHistory() {
+    public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager ();
     }
 }

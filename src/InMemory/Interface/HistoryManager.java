@@ -2,10 +2,11 @@ package InMemory.Interface;
 
 import model.Task;
 
-public interface HistoryManager<T> {
-    HistoryManager<Task> getHistory();
+import java.util.List;
+
+public interface HistoryManager {
 
     void add(Task task);
 
-
+    List<Task> getHistory();
 }

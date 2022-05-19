@@ -1,5 +1,5 @@
-import InMemory.Managers;
 import InMemory.Interface.TaskManager;
+import InMemory.Managers;
 import model.*;
 
 import java.util.ArrayList;
@@ -30,8 +30,7 @@ public class Main {
         System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask2OfEpic2) + "\n");
 
         ArrayList<Integer> subTasksListIdOfEpic2 = new ArrayList<>();
-        Epic epic2 = new Epic(10, "Поменять машину", "Продать старую машину",
-                subTasksListIdOfEpic2);
+        Epic epic2 = new Epic(10, "Поменять машину", "Продать старую машину", subTasksListIdOfEpic2);
 
         int idOfCreatedEpic2 = taskManager.creationOfEpic(epic2).getId();
         System.out.println("Создан Epic: \n" + taskManager.getListOfEpics().get(idOfCreatedEpic2) + "\n");
@@ -87,7 +86,7 @@ public class Main {
     }
 
     public static void printHistory(TaskManager taskManager) {
-        String[] array = taskManager.getHistory().toString().split("},");
+        String[] array = taskManager.getListOfEpics().toString().split("},");
         StringBuilder result = new StringBuilder("История обращения к задачам: \n");
         for (String line : array) {
             result.append(line).append(".\n");

@@ -4,33 +4,31 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface TaskManager {
 
-    HistoryManager<Task> getHistory();
+    Task creationOfTask(Task task);
 
-    Task creationOfTask (Task task);
+    Epic creationOfEpic(Epic epic);
 
-    Epic creationOfEpic (Epic epic);
+    SubTask creationOfSubTask(SubTask subTask);
 
-    SubTask creationOfSubTask (SubTask subTask);
+    Map<Integer, Task> getListOfAllTasks();
 
-    Task getTaskById (Integer id);
+    Map<Integer, Epic> getListOfEpics();
 
-    Epic getEpicById (Integer id);
+    Task getTaskById(Integer id);
 
-    SubTask getSubTaskById (Integer id);
+    Epic getEpicById(Integer id);
 
-    HashMap<Integer, Task> getListOfAllTasks ();
+    SubTask getSubTaskById(Integer id);
 
-    HashMap<Integer, Epic> getListOfEpics ();
+    void updateTaskByNewTask(Task task);
 
-    void updateTaskByNewTask (Task task);
+    void updateSubTaskByNewSubTask(SubTask subTask);
 
-    void updateSubTaskByNewSubTask (SubTask subTask);
+    void deleteTaskById(Integer id);
 
-    void deleteTaskById (Integer id);
-
-    void deleteEpicById (Integer id);
+    void deleteEpicById(Integer id);
 }

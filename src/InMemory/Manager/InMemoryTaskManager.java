@@ -8,12 +8,12 @@ import model.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class InMemoryTaskManager<T> implements TaskManager {
+public  class InMemoryTaskManager implements TaskManager {
     private static int uniqueTaskId = 0;
     private final HashMap<Integer, Task> taskList;
     private final HashMap<Integer, SubTask> subTaskList;
     private final HashMap<Integer, Epic> epicList;
-    private final HistoryManager<T> historyManager;
+    private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -69,7 +69,6 @@ public abstract class InMemoryTaskManager<T> implements TaskManager {
         return listOfAllTasks;
     }
 
-
     @Override
     public HashMap<Integer, Epic> getListOfEpics() {
         return epicList;
@@ -108,7 +107,7 @@ public abstract class InMemoryTaskManager<T> implements TaskManager {
     @Override
     public void updateTaskByNewTask(Task task) {
         if (taskList.containsKey(task.getId())) {
-            taskList.replace (task.getId(), task);
+            taskList.replace(task.getId(), task);
         }
     }
 
@@ -123,20 +122,20 @@ public abstract class InMemoryTaskManager<T> implements TaskManager {
 
     @Override
     public void deleteTaskById(Integer id) {
-        taskList.remove (id);
+        taskList.remove(id);
     }
 
     @Override
     public void deleteEpicById(Integer id) {
-        if (epicList.containsKey(id)) {
-            for (Integer subTaskId : epicList.get(id).getSubTaskIdList()) {
-                if (subTaskList.containsKey(subTaskId) && subTaskList.get(subTaskId).getEpicId() == id) {
-                    subTaskList.remove(subTaskId);
+        if (epicList.containsKey ( id )) {
+            for (Integer subTaskId : epicList.get ( id ).getSubTaskIdList ()) {
+                if (subTaskList.containsKey ( subTaskId ) && subTaskList.get ( subTaskId ).getEpicId () == id) {
+                    subTaskList.remove ( subTaskId );
                 } else {
                     return;
                 }
             }
-            epicList.remove (id);
+            epicList.remove ( id );
         }
     }
 
