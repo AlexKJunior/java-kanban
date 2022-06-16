@@ -4,6 +4,7 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 
+import java.util.List;
 import java.util.Map;
 
 public interface TaskManager {
@@ -16,7 +17,19 @@ public interface TaskManager {
 
     Map<Integer, Task> getListOfAllTasks();
 
+    Map<Integer, Task> getListOfTasks ();
+
     Map<Integer, Epic> getListOfEpics();
+
+    Map<Integer, SubTask> getListOfSubTasks ();
+
+    Map<Integer, Task> deleteAllTasks ();
+
+    Map<Integer, Task> deleteTasks ();
+
+    Map<Integer, Epic> deleteEpics ();
+
+    Map<Integer, SubTask> deleteSubTasks ();
 
     Task getTaskById(Integer id);
 
@@ -24,11 +37,19 @@ public interface TaskManager {
 
     SubTask getSubTaskById(Integer id);
 
-    void updateTaskByNewTask(Task task);
+    Task updateTaskByNewTask(Task task);
 
-    void updateSubTaskByNewSubTask(SubTask subTask);
+    Epic updateEpicByNewEpic (Epic epic);
 
-    void deleteTaskById(Integer id);
+    SubTask updateSubTaskByNewSubTask(SubTask subTask);
 
-    void deleteEpicById(Integer id);
+    Task deleteTaskById(Integer id);
+
+    Epic deleteEpicById(Integer id);
+
+    SubTask deleteSubTaskById (Integer id);
+
+    List<Integer> getListOfSubTasksOfEpic(Integer epicId);
+
+    List<Task> getHistory ();
 }

@@ -25,9 +25,13 @@ public class Main {
                 "Выполнить все задания", idOfCreatedEpic1);
         System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask1OfEpic1) + "\n");
 
-        SubTask subTask2OfEpic2 = new SubTask(10, "Защитить проект диплома",
+        SubTask subTask2OfEpic1 = new SubTask(10, "Защитить проект диплома",
                 "Создать проект диплома", idOfCreatedEpic1);
-        System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask2OfEpic2) + "\n");
+        System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask2OfEpic1) + "\n");
+
+        SubTask subTask3OfEpic1 = new SubTask(10, "Проработать проект диплома",
+                "Найти необходимую информацию для проекта", idOfCreatedEpic1);
+        System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask3OfEpic1) + "\n");
 
         ArrayList<Integer> subTasksListIdOfEpic2 = new ArrayList<>();
         Epic epic2 = new Epic(10, "Поменять машину", "Продать старую машину", subTasksListIdOfEpic2);
@@ -35,41 +39,27 @@ public class Main {
         int idOfCreatedEpic2 = taskManager.creationOfEpic(epic2).getId();
         System.out.println("Создан Epic: \n" + taskManager.getListOfEpics().get(idOfCreatedEpic2) + "\n");
 
-        SubTask subTask1OfEpic2 = new SubTask(10, "Подготовка старой машины к продаже",
-                "Купить новую машину", idOfCreatedEpic2);
-        System.out.println("Создана подзадача: \n" + taskManager.creationOfSubTask(subTask1OfEpic2) + "\n");
 
         printAllTasks(taskManager);
 
-        System.out.println("Получаю задачу по Id 1: \n" + taskManager.getTaskById(1));
-        System.out.println("Получаю задачу по Id 2: \n" + taskManager.getTaskById(2));
-        System.out.println("Получаю задачу по Id 3: \n" + taskManager.getEpicById(3));
-        System.out.println("Получаю задачу по Id 4: \n" + taskManager.getSubTaskById(4));
-        System.out.println("Получаю задачу по Id 5: \n" + taskManager.getSubTaskById(5));
-        System.out.println("Получаю задачу по Id 6: \n" + taskManager.getEpicById(6));
-        System.out.println("Получаю задачу по Id 7: \n" + taskManager.getSubTaskById(7));
-        System.out.println("Получаю задачу по Id 1: \n" + taskManager.getTaskById(1));
-        System.out.println("Получаю задачу по Id 2: \n" + taskManager.getTaskById(2));
-        System.out.println("Получаю задачу по Id 3: \n" + taskManager.getEpicById(3));
-        System.out.println("Получаю задачу по Id 4: \n" + taskManager.getSubTaskById(4));
-        System.out.println("Получаю задачу по Id 5: \n" + taskManager.getSubTaskById(5));
-        System.out.println("Получаю задачу по Id 6: \n" + taskManager.getEpicById(6));
-        System.out.println("Получаю задачу по Id 7: \n" + taskManager.getSubTaskById(7) + "\n");
+        taskManager.getTaskById(1);
+        taskManager.getTaskById(2);
+        taskManager.getTaskById(2);
+        taskManager.getEpicById(3);
+        taskManager.getEpicById(3);
+        taskManager.getSubTaskById(4);
+        taskManager.getSubTaskById(4);
+        taskManager.getSubTaskById(5);
+        taskManager.getSubTaskById(5);
+        taskManager.getSubTaskById(6);
+        taskManager.getTaskById(1);
+        taskManager.getEpicById(7);
 
-        Task task3 = new Task(1, "Поспать (обновлено)", "Хорошо выспаться (обновлено)");
-        task3.setStatus(Status.DONE);
-        taskManager.updateTaskByNewTask(task3);
+        printHistory(taskManager);
 
-        SubTask subTask3OfEpic1 = new SubTask(5, "Защитить проект диплома(обновлено)",
-                "Создать проект диплома(обновлено)", 3);
-        subTask3OfEpic1.setStatus(Status.DONE);
-        taskManager.updateSubTaskByNewSubTask(subTask3OfEpic1);
+        taskManager.deleteTaskById(1);
 
-        printAllTasks(taskManager);
-
-        taskManager.deleteTaskById(2);
-
-        taskManager.deleteEpicById(6);
+        taskManager.deleteEpicById(3);
 
         printAllTasks(taskManager);
 
