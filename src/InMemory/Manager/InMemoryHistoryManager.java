@@ -1,6 +1,7 @@
-package InMemory;
+package InMemory.Manager;
 
 import InMemory.Interface.HistoryManager;
+import InMemory.Node;
 import model.Task;
 
 import java.util.ArrayList;
