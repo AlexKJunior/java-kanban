@@ -9,17 +9,17 @@ import java.util.Map;
 
 public interface TaskManager {
 
-    Task creationOfTask(Task task);
+    Task creationOfTask (Task task);
 
-    Epic creationOfEpic(Epic epic);
+    Epic creationOfEpic (Epic epic);
 
-    SubTask creationOfSubTask(SubTask subTask);
+    SubTask creationOfSubTask (SubTask subTask);
 
-    Map<Integer, Task> getListOfAllTasks();
+    Map<Integer, Task> getListOfAllTasks ();
 
     Map<Integer, Task> getListOfTasks ();
 
-    Map<Integer, Epic> getListOfEpics();
+    Map<Integer, Epic> getListOfEpics ();
 
     Map<Integer, SubTask> getListOfSubTasks ();
 
@@ -31,25 +31,24 @@ public interface TaskManager {
 
     Map<Integer, SubTask> deleteSubTasks ();
 
-    Task getTaskById(Integer id);
+    Task getTaskById (Integer id);
 
-    Epic getEpicById(Integer id);
+    Epic getEpicById (Integer id);
 
-    SubTask getSubTaskById(Integer id);
+    SubTask getSubTaskById (Integer id);
 
-    Task updateTaskByNewTask(Task task);
+    Task updateTaskByNewTask (Task task);
 
     Epic updateEpicByNewEpic (Epic epic);
 
-    SubTask updateSubTaskByNewSubTask(SubTask subTask);
+    SubTask updateSubTaskByNewSubTask (SubTask subTask);
 
-    Task deleteTaskById(Integer id);
+    Task deleteTaskById (Integer id);
 
-    Epic deleteEpicById(Integer id);
+    Epic deleteEpicById (Integer id);
 
     SubTask deleteSubTaskById (Integer id);
 
-    List<Integer> getListOfSubTasksOfEpic(Integer epicId);
+    List<Integer> getListOfSubTasksOfEpic (Integer epicId);
 
-    List<Task> getHistory ();
 }

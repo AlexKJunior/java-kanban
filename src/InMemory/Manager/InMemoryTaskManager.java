@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class InMemoryTaskManager implements TaskManager {
+ public class InMemoryTaskManager implements TaskManager {
     private static int uniqueTaskId = 0;
     private final Map<Integer, Task> taskList;
     private final Map<Integer, SubTask> subTaskList;
@@ -112,8 +112,8 @@ public class InMemoryTaskManager implements TaskManager {
             Integer idOfEpicForClearItSubTasksList = subTaskForDelete.getEpicId();
             if (epicList.containsKey(idOfEpicForClearItSubTasksList)) {
                 epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList().clear();
-                epicList.get(idOfEpicForClearItSubTasksList)
-                        .setStatus(checkEpicStatus(epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList()));
+                epicList.get(idOfEpicForClearItSubTasksList).setStatus(checkEpicStatus(
+                        epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList()));
             } else {
                 return null;
             }
@@ -242,11 +242,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public List<Task> getHistory () {
-        return historyManager.getHistory();
     }
 
     private Status checkEpicStatus(List<Integer> subTaskIdList) {
