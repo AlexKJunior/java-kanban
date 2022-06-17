@@ -1,9 +1,9 @@
-package InMemory;
+package inmemory;
 
-import InMemory.Interface.HistoryManager;
-import InMemory.Interface.TaskManager;
-import InMemory.Manager.InMemoryHistoryManager;
-import InMemory.Manager.InMemoryTaskManager;
+import inmemory.intrface.HistoryManager;
+import inmemory.intrface.TaskManager;
+import inmemory.manager.InMemoryHistoryManager;
+import inmemory.manager.InMemoryTaskManager;
 
 public class Managers {
     public static TaskManager getDefault() {

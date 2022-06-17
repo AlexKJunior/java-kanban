@@ -1,4 +1,4 @@
-package InMemory.Interface;
+package inmemory.intrface;
 
 import model.Epic;
 import model.SubTask;

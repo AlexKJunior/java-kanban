@@ -1,4 +1,4 @@
-package InMemory;
+package inmemory;
 
 public class Node<Task> {
 

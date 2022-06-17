@@ -1,5 +1,5 @@
-import InMemory.Interface.TaskManager;
-import InMemory.Managers;
+import inmemory.intrface.TaskManager;
+import inmemory.Managers;
 import model.*;
 
 import java.util.ArrayList;

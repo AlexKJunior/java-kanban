@@ -1,8 +1,8 @@
-package InMemory.Manager;
+package inmemory.manager;
 
-import InMemory.Interface.HistoryManager;
-import InMemory.Interface.TaskManager;
-import InMemory.Managers;
+import inmemory.intrface.HistoryManager;
+import inmemory.intrface.TaskManager;
+import inmemory.Managers;
 import model.*;
 
 import java.util.List;
