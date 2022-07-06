@@ -18,12 +18,24 @@ public class Task {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Status getStatus() {
@@ -32,6 +44,16 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                '}';
     }
 
     @Override
@@ -44,16 +66,19 @@ public class Task {
     }
 
     @Override
-    public int hashCode () {
-        return Objects.hash ( id, name, description, status );
-    }
-    @Override
-    public String toString () {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status=" + status +
-                '}';
+    public int hashCode() {
+        int hash = 17;
+        hash = hash + id;
+        if (name != null) {
+            hash = hash + name.hashCode();
+        }
+        hash = hash * 31;
+        if (description != null) {
+            hash = hash + description.hashCode();
+        }
+        if (status != null) {
+            hash = hash + status.hashCode();
+        }
+        return hash;
     }
 }

@@ -1,20 +1,23 @@
 package inmemory.manager;
 
-import inmemory.intrface.HistoryManager;
-import inmemory.intrface.TaskManager;
-import inmemory.Managers;
-import model.*;
+import model.Epic;
+import model.Status;
+import model.SubTask;
+import model.Task;
+
+import inmemory.intrface.*;
+import inmemory.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
- public class InMemoryTaskManager implements TaskManager {
-    private static int uniqueTaskId = 0;
-    private final Map<Integer, Task> taskList;
-    private final Map<Integer, SubTask> subTaskList;
-    private final Map<Integer, Epic> epicList;
-    private final HistoryManager historyManager;  // доавил модификатор доступа и final
+public class InMemoryTaskManager implements TaskManager {
+    protected static int uniqueTaskId = 0;
+    protected final Map<Integer, Task> taskList;
+    protected final Map<Integer, SubTask> subTaskList;
+    protected final Map<Integer, Epic> epicList;
+    protected final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -50,7 +53,7 @@ import java.util.HashMap;
         if (epicList.containsKey(subTask.getEpicId())) {
             uniqueTaskId++;
             SubTask newSubTask = new SubTask(uniqueTaskId, subTask.getName(), subTask.getDescription(),
-                    subTask.getEpicId()); // перенес запятую
+                    subTask.getEpicId());
             newSubTask.setStatus(Status.NEW);
             subTaskList.put(uniqueTaskId, newSubTask);
             Epic epicForUpdate = epicList.get(subTask.getEpicId());
@@ -71,7 +74,7 @@ import java.util.HashMap;
     }
 
     @Override
-    public Map<Integer, Task> getListOfTasks () {
+    public Map<Integer, Task> getListOfTasks() {
         return taskList;
     }
 
@@ -81,12 +84,12 @@ import java.util.HashMap;
     }
 
     @Override
-    public Map<Integer, SubTask> getListOfSubTasks () {
+    public Map<Integer, SubTask> getListOfSubTasks() {
         return subTaskList;
     }
 
     @Override
-    public Map<Integer, Task> deleteAllTasks () {
+    public Map<Integer, Task> deleteAllTasks() {
         epicList.clear();
         taskList.clear();
         subTaskList.clear();
@@ -94,26 +97,26 @@ import java.util.HashMap;
     }
 
     @Override
-    public Map<Integer, Task> deleteTasks () {
+    public Map<Integer, Task> deleteTasks() {
         taskList.clear();
         return taskList;
     }
 
     @Override
-    public Map<Integer, Epic> deleteEpics () {
+    public Map<Integer, Epic> deleteEpics() {
         subTaskList.clear();
         epicList.clear();
         return epicList;
     }
 
     @Override
-    public Map<Integer, SubTask> deleteSubTasks () {
+    public Map<Integer, SubTask> deleteSubTasks() {
         for (SubTask subTaskForDelete : subTaskList.values()) {
             Integer idOfEpicForClearItSubTasksList = subTaskForDelete.getEpicId();
             if (epicList.containsKey(idOfEpicForClearItSubTasksList)) {
                 epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList().clear();
-                epicList.get(idOfEpicForClearItSubTasksList).setStatus(checkEpicStatus(
-                        epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList()));
+                epicList.get(idOfEpicForClearItSubTasksList)
+                        .setStatus(checkEpicStatus(epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList()));
             } else {
                 return null;
             }
@@ -162,7 +165,7 @@ import java.util.HashMap;
     }
 
     @Override
-    public Epic updateEpicByNewEpic (Epic epic) {
+    public Epic updateEpicByNewEpic(Epic epic) {
         if (epicList.containsKey(epic.getId())) {
             if (epic.getSubTaskIdList() != null) {
                 Epic replacedEpic = epicList.replace(epic.getId(), epic);
@@ -218,7 +221,7 @@ import java.util.HashMap;
     }
 
     @Override
-    public SubTask deleteSubTaskById (Integer id) {
+    public SubTask deleteSubTaskById(Integer id) {
         if (subTaskList.containsKey(id)) {
             Integer idOfEpicForClearItSubTasksList = subTaskList.get(id).getEpicId();
             if (epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList().contains(id)) {
@@ -244,7 +247,12 @@ import java.util.HashMap;
         }
     }
 
-    private Status checkEpicStatus(List<Integer> subTaskIdList) {
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
+    protected Status checkEpicStatus(List<Integer> subTaskIdList) {
         boolean isNew = false;
         boolean isInProgress = false;
         boolean isDone = false;
