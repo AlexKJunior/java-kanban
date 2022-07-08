@@ -15,6 +15,8 @@ public interface TaskManager {
 
     SubTask creationOfSubTask (SubTask subTask);
 
+    SubTask updateStatusSubTask (SubTask subTask);
+
     Map<Integer, Task> getListOfAllTasks ();
 
     Map<Integer, Task> getListOfTasks ();
@@ -29,7 +31,13 @@ public interface TaskManager {
 
     Map<Integer, Epic> deleteEpics ();
 
+    Map<Integer, Task> deleteALLTasks ();
+
+    Map<Integer, Epic> deleteAllEpics ();
+
     Map<Integer, SubTask> deleteSubTasks ();
+
+    Map<Integer, SubTask> deleteAllSubTasks ();
 
     Task getTaskById (Integer id);
 

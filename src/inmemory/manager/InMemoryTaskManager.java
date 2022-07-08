@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class InMemoryTaskManager implements TaskManager {
-    protected static int uniqueTaskId = 0;
+public abstract class InMemoryTaskManager implements TaskManager {
+    protected int uniqueTaskId = 1;
     protected final Map<Integer, Task> taskList;
     protected final Map<Integer, SubTask> subTaskList;
     protected final Map<Integer, Epic> epicList;
@@ -49,7 +49,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask creationOfSubTask(SubTask subTask) {
+    public SubTask updateStatusSubTask (SubTask subTask) {
+
         if (epicList.containsKey(subTask.getEpicId())) {
             uniqueTaskId++;
             SubTask newSubTask = new SubTask(uniqueTaskId, subTask.getName(), subTask.getDescription(),
@@ -74,18 +75,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, Task> getListOfTasks() {
-        return taskList;
+    public HashMap<Integer, Task> getListOfTasks() {
+
+        return new HashMap<>(taskList);
     }
 
     @Override
-    public Map<Integer, Epic> getListOfEpics() {
-        return epicList;
+    public HashMap<Integer, Epic> getListOfEpics() {
+
+        return new HashMap<>(epicList);
     }
 
     @Override
-    public Map<Integer, SubTask> getListOfSubTasks() {
-        return subTaskList;
+    public HashMap<Integer, SubTask> getListOfSubTasks() {
+
+        return new HashMap<>(subTaskList);
     }
 
     @Override
@@ -93,25 +97,28 @@ public class InMemoryTaskManager implements TaskManager {
         epicList.clear();
         taskList.clear();
         subTaskList.clear();
+        historyManager.clear();
         return getListOfAllTasks();
     }
 
     @Override
-    public Map<Integer, Task> deleteTasks() {
+    public Map<Integer, Task> deleteALLTasks () {
         taskList.clear();
         return taskList;
     }
 
     @Override
-    public Map<Integer, Epic> deleteEpics() {
+    public Map<Integer, Epic> deleteAllEpics () {
         subTaskList.clear();
         epicList.clear();
         return epicList;
     }
 
     @Override
-    public Map<Integer, SubTask> deleteSubTasks() {
-        for (SubTask subTaskForDelete : subTaskList.values()) {
+    public Map<Integer, SubTask> deleteAllSubTasks () {
+        HashMap<Object, Object> epicsMap = null;
+        for (Object id : epicsMap.keySet()) {
+            SubTask subTaskForDelete = null;
             Integer idOfEpicForClearItSubTasksList = subTaskForDelete.getEpicId();
             if (epicList.containsKey(idOfEpicForClearItSubTasksList)) {
                 epicList.get(idOfEpicForClearItSubTasksList).getSubTaskIdList().clear();
