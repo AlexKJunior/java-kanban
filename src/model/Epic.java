@@ -1,18 +1,23 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Epic extends Task {
-    private List<Integer> subTaskIdList;
+public class Epic extends Task<Object> {
+    private List<Integer> subTaskIdList= new ArrayList<> ();
 
-    public Epic(int id, String name, String description, List<Integer> subTaskIdList) {
-        super(id, name, description);
+    public Epic() {
+        super();
         this.subTaskIdList = subTaskIdList;
     }
 
     public List<Integer> getSubTaskIdList() {
         return subTaskIdList;
+    }
+
+    public Object getType() {
+        return  TaskType ;
     }
 
     @Override
@@ -38,5 +43,9 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), subTaskIdList);
+    }
+
+    public boolean updateSubTaskIdList () {
+        return false;
     }
 }

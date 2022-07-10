@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class InMemoryHistoryManager implements HistoryManager {
+public class InMemoryHistoryManager implements HistoryManager {
     private final List<Task> historyOfRequestsList;
     private final Map<Integer, Node<Task>> tasksIndexInHistoryList;
     private Node<Task> head;
@@ -41,6 +41,10 @@ public abstract class InMemoryHistoryManager implements HistoryManager {
     @Override
     public List<Task> getHistory() {
         return getTasks();
+    }
+
+    @Override
+    public void clear () {
     }
 
     private Node<Task> linkLast(Task task) {

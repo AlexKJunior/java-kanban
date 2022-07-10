@@ -25,19 +25,19 @@ public interface TaskManager {
 
     Map<Integer, SubTask> getListOfSubTasks ();
 
-    Map<Integer, Task> deleteAllTasks ();
+    void deleteAllTasks ();
 
     Map<Integer, Task> deleteTasks ();
 
     Map<Integer, Epic> deleteEpics ();
 
-    Map<Integer, Task> deleteALLTasks ();
+    void deleteALLTasks ();
 
-    Map<Integer, Epic> deleteAllEpics ();
+    void deleteAllEpics ();
 
     Map<Integer, SubTask> deleteSubTasks ();
 
-    Map<Integer, SubTask> deleteAllSubTasks ();
+    void deleteAllSubTasks ();
 
     Task getTaskById (Integer id);
 

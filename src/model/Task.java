@@ -2,20 +2,27 @@ package model;
 
 import java.util.Objects;
 
-public class Task {
+public class Task<TaskType> {
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
+    public TaskType TaskType;
+
 
     public Task(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
+    public  TaskType getType() {
+        return  TaskType ;
+    }
+
+    private void getTYPE () {
+    }
 
     public Task () {
-
     }
 
     public int getId() {

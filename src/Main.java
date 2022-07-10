@@ -21,8 +21,8 @@ public class Main {
 
 
         ArrayList<Integer> subTasksListIdOfEpic1 = new ArrayList<>();
-        Epic epic1 = new Epic(100, "Тестирование 3", "Создать тестовый Epic 1"
-                , subTasksListIdOfEpic1);
+        Epic epic1 = new Epic(
+        );
         int idOfCreatedEpic1 = fileBackedTasksManager.creationOfEpic(epic1).getId();
 
 
