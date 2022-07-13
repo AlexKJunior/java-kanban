@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Epic extends Task<Object> {
+public class Epic extends Task {
     private List<Integer> subTaskIdList= new ArrayList<> ();
 
-    public Epic() {
-        super();
+    public Epic(int id, String name, String description) {
+        super(id, name, description, Status.NEW);
         this.subTaskIdList = subTaskIdList;
     }
 
@@ -16,8 +16,8 @@ public class Epic extends Task<Object> {
         return subTaskIdList;
     }
 
-    public Object getType() {
-        return  TaskType ;
+    public TypeTask getType() {
+        return TypeTask.EPIC;
     }
 
     @Override

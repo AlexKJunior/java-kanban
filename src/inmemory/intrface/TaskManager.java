@@ -3,11 +3,14 @@ package inmemory.intrface;
 import model.Epic;
 import model.SubTask;
 import model.Task;
+import model.TypeTask;
 
 import java.util.List;
 import java.util.Map;
 
 public interface TaskManager {
+
+    TypeTask getType ();
 
     Task creationOfTask (Task task);
 
@@ -27,15 +30,9 @@ public interface TaskManager {
 
     void deleteAllTasks ();
 
-    Map<Integer, Task> deleteTasks ();
-
-    Map<Integer, Epic> deleteEpics ();
-
     void deleteALLTasks ();
 
     void deleteAllEpics ();
-
-    Map<Integer, SubTask> deleteSubTasks ();
 
     void deleteAllSubTasks ();
 

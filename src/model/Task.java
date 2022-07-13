@@ -2,27 +2,26 @@ package model;
 
 import java.util.Objects;
 
-public class Task<TaskType> {
+public class Task {
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
-    public TaskType TaskType;
-
 
     public Task(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
-    public  TaskType getType() {
-        return  TaskType ;
+    public  TypeTask getType() {
+
+        return  TypeTask.TASK ;
     }
 
     private void getTYPE () {
     }
 
-    public Task () {
+    public Task (int id, String name, String description, Status aNew) {
     }
 
     public int getId() {
@@ -54,6 +53,7 @@ public class Task<TaskType> {
     }
 
     public void setStatus(Status status) {
+
         this.status = status;
     }
 

@@ -1,9 +1,6 @@
 package inmemory.manager;
 
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import model.*;
 
 import inmemory.intrface.*;
 import inmemory.*;
@@ -27,6 +24,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public TypeTask getType () {
+        return null;
+    }
+
+    @Override
     public Task creationOfTask(Task task) {
         uniqueTaskId++;
         task.setId(uniqueTaskId);
@@ -46,7 +48,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public SubTask creationOfSubTask (SubTask subTask) {
-        return null;
+        uniqueTaskId++;
+        subTask.setId(uniqueTaskId);
+        subTask.setStatus(Status.NEW);
+        subTaskList.put(uniqueTaskId, subTask);
+        return subTask;
+
     }
 
     @Override
@@ -100,16 +107,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, Task> deleteTasks () {
-        return null;
-    }
-
-    @Override
-    public Map<Integer, Epic> deleteEpics () {
-        return null;
-    }
-
-    @Override
     public void deleteALLTasks () {
         taskList.clear();
     }
@@ -118,11 +115,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics () {
         subTaskList.clear();
         epicList.clear();
-    }
-
-    @Override
-    public Map<Integer, SubTask> deleteSubTasks () {
-        return null;
     }
 
     @Override
@@ -258,6 +250,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
+
         return historyManager.getHistory();
     }
 
