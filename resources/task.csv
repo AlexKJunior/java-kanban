@@ -1,3 +1,3 @@
-id,type,name,status,description,epic,subtasks
-2,SUBTASK,Тестирование 4,NEW,Создать тестовый SubTask 1,0,-,
-3,SUBTASK,Тестирование 5,NEW,Создать тестовый SubTask 2,0,-,
+id,type,name,status,description,epic
+2,SUBTASK,Тестирование 4,NEW,Создать тестовый SubTask 1,100
+3,SUBTASK,Тестирование 5,NEW,Создать тестовый SubTask 2,100

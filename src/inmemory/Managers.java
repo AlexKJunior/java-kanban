@@ -12,8 +12,8 @@ public class Managers {
     }
 
     public static HistoryManager getDefaultHistory() {
-
         return new InMemoryHistoryManager () {
+
             @Override
             public void clear () {
 

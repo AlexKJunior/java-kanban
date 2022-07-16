@@ -8,20 +8,13 @@ public class Task {
     protected String description;
     protected Status status;
 
-    public Task(int id, String name, String description) {
+    public Task (int id, String name, String description, Status aNew) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
-    public  TypeTask getType() {
-
-        return  TypeTask.TASK ;
-    }
-
-    private void getTYPE () {
-    }
-
-    public Task (int id, String name, String description, Status aNew) {
+    public TypeTask getType() {
+        return TypeTask.TASK;
     }
 
     public int getId() {
@@ -53,7 +46,6 @@ public class Task {
     }
 
     public void setStatus(Status status) {
-
         this.status = status;
     }
 
