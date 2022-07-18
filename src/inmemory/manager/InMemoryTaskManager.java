@@ -23,10 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = Managers.getDefaultHistory();
     }
 
-    @Override
-    public TypeTask getType () {
-        return null;
-    }
+
 
     @Override
     public Task creationOfTask(Task task) {
@@ -74,7 +71,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, Task> getListOfAllTasks() {
+    public  Map<Integer, Task> getListOfAllTasks () {
         Map<Integer, Task> listOfAllTasks = new HashMap<>();
         listOfAllTasks.putAll(epicList);
         listOfAllTasks.putAll(taskList);
@@ -104,11 +101,6 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskList.clear();
         historyManager.clear();
 
-    }
-
-    @Override
-    public void deleteALLTasks () {
-        taskList.clear();
     }
 
     @Override

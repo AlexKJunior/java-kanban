@@ -2,7 +2,6 @@ import inmemory.Managers;
 import inmemory.intrface.TaskManager;
 import inmemory.manager.FileBackedTasksManager;
 import model.Epic;
-import model.Status;
 import model.SubTask;
 import model.Task;
 
@@ -16,10 +15,10 @@ public class Main {
          TaskManager taskManager = FileBackedTasksManager.loadFromFile ( new File (
                 "resources/task.csv" ) );
 
-        Task task1 =  new Task ( 100, "Тестирование 1", "Создать тестовый Task 1", Status.NEW );
+        Task task1 =  new Task ( 100, "Тестирование 1", "Создать тестовый Task 1" );
         fileBackedTasksManager.creationOfTask ( task1 );
 
-        Task task2 = new Task ( 100, "Тестирование 2", "Создать тестовый Task 2", Status.NEW );
+        Task task2 = new Task ( 100, "Тестирование 2", "Создать тестовый Task 2" );
         fileBackedTasksManager.creationOfTask ( task2 );
 
         ArrayList<Integer> subTasksListIdOfEpic1 = new ArrayList<> ();

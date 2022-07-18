@@ -8,10 +8,11 @@ public class Task {
     protected String description;
     protected Status status;
 
-    public Task (int id, String name, String description, Status aNew) {
+    public Task (int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
+
     }
     public TypeTask getType() {
         return TypeTask.TASK;

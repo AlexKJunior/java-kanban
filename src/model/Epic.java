@@ -5,16 +5,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    private List<Integer> subTaskIdList= new ArrayList<> ();
+    private final List<Integer> subTaskIdList= new ArrayList<> ();
 
     public Epic(int id, String name, String description) {
-        super(id, name, description, Status.NEW);
+        super(id, name, description );
     }
 
     public List<Integer> getSubTaskIdList() {
         return subTaskIdList;
     }
 
+    @Override
     public TypeTask getType() {
         return TypeTask.EPIC;
     }
