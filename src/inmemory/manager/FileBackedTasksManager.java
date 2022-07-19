@@ -6,8 +6,12 @@ import model.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.HashMap;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, SubTask> subtasks = new HashMap<>();
     public static final String HEAD = "id,type,name,status,description,epic\n";
 
     public static FileBackedTasksManager loadFromFile(File file) {
@@ -18,29 +22,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 bufferedReader.readLine();
                 while (bufferedReader.ready()) {
                     String str = bufferedReader.readLine();
-                    if (str != null && str.isEmpty()) {
+                    if (str.isEmpty()) {
                         String history = bufferedReader.readLine();
-                        fileBackedTasksManager.historyFromString(history);
-
+                         if(history != null) {
+                             fileBackedTasksManager.historyFromString ( history );
+                         }
                     } else {
                         fileBackedTasksManager.tasksFromString(str);
                     }
                 }
             } catch (IOException e) {
             }
-            try {
-                Files.createFile(file.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return fileBackedTasksManager;
+}
 
-    }
+    public static void main (String[] args) {// Создаем задачи и тестируем программу
 
-    public static void main (String[] args) {
-        FileBackedTasksManager fileBackedTasksManager  = new FileBackedTasksManager (new File (
-                "resources/task.csv" ));
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile ( new File (
+                "resources/task.csv" ) );
 
         // Создаю задачу 1
         Task task1 = new Task ( 100, "Тестирование 1", "Создать тестовый Task 1" );
@@ -49,7 +49,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         // Создаю задачу 2
         Task task2 = new Task ( 100, "Тестирование 2", "Создать тестовый Task 2" );
         fileBackedTasksManager.creationOfTask ( task2 );
-
+        System.out.println(fileBackedTasksManager.getHistory());
         // Создаю Epic1 с двумя подзадачами
         Epic epic1 = new Epic ( 100, "Тестирование 3", "Создать тестовый Epic 1" );
         int idOfCreatedEpic1 = fileBackedTasksManager.creationOfEpic ( epic1 ).getId ();
@@ -63,7 +63,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         SubTask subTask2OfEpic1 = new SubTask ( 10, "Тестирование 5"
                 , "Создать тестовый SubTask 2", idOfCreatedEpic1 );
         fileBackedTasksManager.creationOfSubTask ( subTask2OfEpic1 );
+        System.out.println(fileBackedTasksManager.getHistory());
 
+        System.out.println("Выводим Task 1" + "\n" + fileBackedTasksManager.getTaskById(0));
+        System.out.println("Выводим Epic 2" + "\n" + fileBackedTasksManager.getTaskById(6));
         // Обращаюсь к задачам по их ID для заполнения истории просмотров
         fileBackedTasksManager.getTaskById ( 2 );
         fileBackedTasksManager.getTaskById ( 1 );
@@ -72,7 +75,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         fileBackedTasksManager.getEpicById ( 3 );
         fileBackedTasksManager.getSubTaskById ( 5 );
         fileBackedTasksManager.getSubTaskById ( 4 );
+        System.out.println("Выводим историю" + "\n" + fileBackedTasksManager.getHistory());
 
+        fileBackedTasksManager.deleteTaskById(task1.getId());  //Тестируем удаление
+        System.out.println("Выводим историю без задачи 1" + "\n"
+                + fileBackedTasksManager.getHistory());
     }
 
     private final File saveFile;
@@ -146,28 +153,35 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void tasksFromString(String stringOfTask) {
-        FileBackedTasksManager fileBackedTasksManager  = new FileBackedTasksManager(
-                new File ( "resources/task.csv" ) );
-        uniqueTaskId++;
+
         String[] words = stringOfTask.split(",");
         TypeTask typeTasks = TypeTask.valueOf(words[1]);
+        int id = Integer.parseInt(words[0]);
+        int maybeId=0;
+
         switch (typeTasks) {
+
             case TASK :
-                int id = Integer.parseInt(words[0]);
-                creationOfTask( new Task (id, words[2], words[4] ))
-                    .setStatus(Status.valueOf (Status.valueOf(words[3]).toString()));
+                Task task = new Task(id, words[2], words[4] );
+                task.setStatus(Status.valueOf(words[3]));
+                tasks.put(id, task);
+                if (task.getId()<maybeId) {
+                    maybeId = task.getId ();
+                }
+                break;
             case EPIC :
-                id = Integer.parseInt ( words[0] );
-                creationOfEpic ( new Epic (id, words[2], words[4] ))
-                        .setStatus(Status.valueOf (Status.valueOf(words[3]).toString()));
+                Epic epic = new Epic( id, words[2], words[4]);
+                epic.setStatus(Status.valueOf(words[3]));
+                epics.put(id, epic);
+                break;
             case SUBTASK :
-                id = Integer.parseInt ( words[0] );
-                creationOfSubTask(new SubTask(id, words[2], words[4],
-                    Integer.parseInt(words[5]))).setStatus(Status.valueOf (Status.valueOf(words[3]).
-                    toString()));
-
-
-        }
+                SubTask subtask = new SubTask(id, words[2], words[4],Integer.parseInt(words[5]));
+                subtask.setStatus(Status.valueOf(words[3]));
+                subtasks.put(id, subtask);
+                epics.get(subtask.getEpicId()).addSubtask(subtask);
+                break;
+            }
+        uniqueTaskId = maybeId + 1;
     }
 
     private String historyToString() {
@@ -180,9 +194,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     private void historyFromString(String stringOfHistory) {
-        FileBackedTasksManager fileBackedTasksManager  = new FileBackedTasksManager(
-                new File ( "resources/task.csv" ) );
-        uniqueTaskId++;
         String[] words = stringOfHistory.split(",");
         for (String word : words) {
             if (getListOfAllTasks().get(Integer.parseInt(word)) != null) {

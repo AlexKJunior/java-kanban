@@ -1,7 +1,7 @@
 package inmemory.manager;
 
-import inmemory.intrface.HistoryManager;
 import inmemory.Node;
+import inmemory.intrface.HistoryManager;
 import model.Task;
 
 import java.util.ArrayList;
@@ -14,6 +14,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node<Task>> tasksIndexInHistoryList;
     private Node<Task> head;
     private Node<Task> tail;
+    private InMemoryHistoryManager mapNode;
 
     public InMemoryHistoryManager() {
         this.historyOfRequestsList = new ArrayList<>();
@@ -45,6 +46,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void clear () {
+        Node head = new Node(null,null,null);
+        Node tail = head;
+       mapNode.clear();
     }
 
     private Node<Task> linkLast(Task task) {

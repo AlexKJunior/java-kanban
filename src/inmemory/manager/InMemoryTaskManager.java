@@ -1,16 +1,20 @@
 package inmemory.manager;
 
-import model.*;
+import inmemory.Managers;
+import inmemory.intrface.HistoryManager;
+import inmemory.intrface.TaskManager;
+import model.Epic;
+import model.Status;
+import model.SubTask;
+import model.Task;
 
-import inmemory.intrface.*;
-import inmemory.*;
-
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    protected int uniqueTaskId = +1;
+    protected int uniqueTaskId = 1;
     protected final Map<Integer, Task> taskList;
     protected final Map<Integer, SubTask> subTaskList;
     protected final Map<Integer, Epic> epicList;
@@ -22,8 +26,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.epicList = new HashMap<>();
         this.historyManager = Managers.getDefaultHistory();
     }
-
-
 
     @Override
     public Task creationOfTask(Task task) {
@@ -72,7 +74,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public  Map<Integer, Task> getListOfAllTasks () {
-        Map<Integer, Task> listOfAllTasks = new HashMap<>();
+        Map<Integer, Task> listOfAllTasks = new LinkedHashMap<> ();
         listOfAllTasks.putAll(epicList);
         listOfAllTasks.putAll(taskList);
         listOfAllTasks.putAll(subTaskList);
@@ -100,7 +102,6 @@ public class InMemoryTaskManager implements TaskManager {
         taskList.clear();
         subTaskList.clear();
         historyManager.clear();
-
     }
 
     @Override
@@ -242,7 +243,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-
         return historyManager.getHistory();
     }
 
