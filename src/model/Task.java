@@ -50,9 +50,6 @@ public class Task {
         this.status = status;
     }
 
-    public void addSubtask (SubTask subtask) {
-    }
-
     @Override
     public String toString() {
         return "Task{" +

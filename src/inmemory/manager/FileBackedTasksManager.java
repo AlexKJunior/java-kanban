@@ -6,12 +6,9 @@ import model.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.HashMap;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    private HashMap<Integer, Task> tasks = new HashMap<>();
-    private HashMap<Integer, Epic> epics = new HashMap<>();
-    private HashMap<Integer, SubTask> subtasks = new HashMap<>();
+    private static int uniqueTaskId;
     public static final String HEAD = "id,type,name,status,description,epic\n";
 
     public static FileBackedTasksManager loadFromFile(File file) {
@@ -31,6 +28,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                         fileBackedTasksManager.tasksFromString(str);
                     }
                 }
+                uniqueTaskId +=1;
             } catch (IOException e) {
             }
         }
@@ -157,7 +155,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] words = stringOfTask.split(",");
         TypeTask typeTasks = TypeTask.valueOf(words[1]);
         int id = Integer.parseInt(words[0]);
-        int maybeId=0;
+        if (uniqueTaskId < id) {
+            uniqueTaskId = id;
+        }
 
         switch (typeTasks) {
 
@@ -165,9 +165,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 Task task = new Task(id, words[2], words[4] );
                 task.setStatus(Status.valueOf(words[3]));
                 tasks.put(id, task);
-                if (task.getId()<maybeId) {
-                    maybeId = task.getId ();
-                }
                 break;
             case EPIC :
                 Epic epic = new Epic( id, words[2], words[4]);
@@ -175,13 +172,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 epics.put(id, epic);
                 break;
             case SUBTASK :
-                SubTask subtask = new SubTask(id, words[2], words[4],Integer.parseInt(words[5]));
-                subtask.setStatus(Status.valueOf(words[3]));
-                subtasks.put(id, subtask);
-                epics.get(subtask.getEpicId()).addSubtask(subtask);
+                SubTask subTask = new SubTask(id, words[2], words[4],Integer.parseInt(words[5]));
+                subTask.setStatus(Status.valueOf(words[3]));
+                subtasks.put(id, subTask);
+                epics.get(subTask.getEpicId());
+                epics.get(subTask.getEpicId()).getSubTaskIdList().add(subTask.getId());
                 break;
             }
-        uniqueTaskId = maybeId + 1;
     }
 
     private String historyToString() {

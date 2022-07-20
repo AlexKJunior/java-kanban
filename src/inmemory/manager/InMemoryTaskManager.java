@@ -15,6 +15,9 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int uniqueTaskId = 1;
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, SubTask> subtasks = new HashMap<>();
     protected final Map<Integer, Task> taskList;
     protected final Map<Integer, SubTask> subTaskList;
     protected final Map<Integer, Epic> epicList;
@@ -51,8 +54,9 @@ public class InMemoryTaskManager implements TaskManager {
         subTask.setId(uniqueTaskId);
         subTask.setStatus(Status.NEW);
         subTaskList.put(uniqueTaskId, subTask);
+        Epic updateStatusEpic = epicList.get(subTask.getEpicId());
+        updateStatusEpic.getSubTaskIdList().add(subTask.getId());
         return subTask;
-
     }
 
     @Override
@@ -244,16 +248,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
-    }
-
-    @Override
-    public Map<Integer, Task> getTasksMap () {
-        return null;
-    }
-
-    @Override
-    public Map<Integer, SubTask> getSubTasksMap () {
-        return null;
     }
 
     protected Status checkEpicStatus(List<Integer> subTaskIdList) {
