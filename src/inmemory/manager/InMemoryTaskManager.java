@@ -8,6 +8,7 @@ import model.Status;
 import model.SubTask;
 import model.Task;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -56,6 +57,7 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskList.put(uniqueTaskId, subTask);
         Epic updateStatusEpic = epicList.get(subTask.getEpicId());
         updateStatusEpic.getSubTaskIdList().add(subTask.getId());
+        updateStatusEpic.add(subTask.getId());
         return subTask;
     }
 
@@ -248,6 +250,41 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public void setTaskAndSubTaskStartDateTime (Task task, String startDateTime) {
+
+    }
+
+    @Override
+    public void setTaskAndSubTaskDuration (Task task, int durationInMinutes) {
+
+    }
+
+    @Override
+    public LocalDateTime getStartDateTime (Task task) {
+        return null;
+    }
+
+    @Override
+    public void setEpicDuration (int epicId) {
+
+    }
+
+    @Override
+    public void setEpicStartDateTime (int epicId) {
+
+    }
+
+    @Override
+    public int getTaskDuration (Task task) {
+        return 0;
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks () {
+        return null;
     }
 
     protected Status checkEpicStatus(List<Integer> subTaskIdList) {

@@ -14,9 +14,7 @@ public class Epic extends Task {
     public List<Integer> getSubTaskIdList() {
         return subTaskIdList;
     }
-
-    public void addSubtask (SubTask subtask) {
-    }
+    
 
     @Override
     public TypeTask getType() {
@@ -50,5 +48,8 @@ public class Epic extends Task {
 
     public boolean updateSubTaskIdList () {
         return false;
+    }
+
+    public void add (int id) {
     }
 }
