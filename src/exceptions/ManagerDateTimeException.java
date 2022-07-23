@@ -1,6 +1,6 @@
 package exceptions;
 
-public class ManagerDateTimeException extends Throwable {
+public class ManagerDateTimeException extends RuntimeException {
     public ManagerDateTimeException(String message) {
         super(message);
     }

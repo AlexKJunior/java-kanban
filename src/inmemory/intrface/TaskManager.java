@@ -10,49 +10,49 @@ import java.util.Map;
 
 public interface TaskManager {
 
-    Task creationOfTask (Task task);
+    Task creationOfTask(Task task);
 
-    Epic creationOfEpic (Epic epic);
+    Epic creationOfEpic(Epic epic);
 
-    SubTask creationOfSubTask (SubTask subTask);
+    SubTask creationOfSubTask(SubTask subTask);
 
-    SubTask updateStatusSubTask (SubTask subTask);
+    SubTask updateStatusSubTask(SubTask subTask);
 
-    Map<Integer, Task> getListOfAllTasks ();
+    Map<Integer, Task> getListOfAllTasks();
 
-    Map<Integer, Task> getListOfTasks ();
+    Map<Integer, Task> getListOfTasks();
 
-    Map<Integer, Epic> getListOfEpics ();
+    Map<Integer, Epic> getListOfEpics();
 
-    Map<Integer, SubTask> getListOfSubTasks ();
+    Map<Integer, SubTask> getListOfSubTasks();
 
-    void deleteAllTasks ();
+    void deleteAllTasks();
 
-    void deleteAllEpics ();
+    void deleteAllEpics();
 
-    void deleteAllSubTasks ();
+    void deleteAllSubTasks();
 
-    Task getTaskById (Integer id);
+    Task getTaskById(Integer id);
 
-    Epic getEpicById (Integer id);
+    Epic getEpicById(Integer id);
 
-    SubTask getSubTaskById (Integer id);
+    SubTask getSubTaskById(Integer id);
 
-    Task updateTaskByNewTask (Task task);
+    Task updateTaskByNewTask(Task task);
 
-    Epic updateEpicByNewEpic (Epic epic);
+    Epic updateEpicByNewEpic(Epic epic);
 
-    SubTask updateSubTaskByNewSubTask (SubTask subTask);
+    SubTask updateSubTaskByNewSubTask(SubTask subTask);
 
-    Task deleteTaskById (Integer id);
+    Task deleteTaskById(Integer id);
 
-    Epic deleteEpicById (Integer id);
+    Epic deleteEpicById(Integer id);
 
-    SubTask deleteSubTaskById (Integer id);
+    SubTask deleteSubTaskById(Integer id);
 
-    List<Integer> getListOfSubTasksOfEpic (Integer epicId);
+    List<Integer> getListOfSubTasksOfEpic(Integer epicId);
 
-    List<Task> getHistory ();
+    List<Task> getHistory();
 
     void setTaskAndSubTaskStartDateTime(Task task, String startDateTime);
 
@@ -66,5 +66,5 @@ public interface TaskManager {
 
     int getTaskDuration(Task task);
 
-    List <Task> getPrioritizedTasks();
+    List<Task> getPrioritizedTasks();
 }

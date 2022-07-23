@@ -1,18 +1,16 @@
 package inmemory.manager;
 
+import exceptions.ManagerDateTimeException;
 import inmemory.Managers;
 import inmemory.intrface.HistoryManager;
 import inmemory.intrface.TaskManager;
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import model.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     protected int uniqueTaskId = 1;
@@ -23,6 +21,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, SubTask> subTaskList;
     protected final Map<Integer, Epic> epicList;
     protected final HistoryManager historyManager;
+    protected DateTimeFormatter dateTimeFormatter;
 
     public InMemoryTaskManager() {
         this.taskList = new HashMap<>();
@@ -50,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask creationOfSubTask (SubTask subTask) {
+    public SubTask creationOfSubTask(SubTask subTask) {
         uniqueTaskId++;
         subTask.setId(uniqueTaskId);
         subTask.setStatus(Status.NEW);
@@ -62,8 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask updateStatusSubTask (SubTask subTask) {
-
+    public SubTask updateStatusSubTask(SubTask subTask) {
         if (epicList.containsKey(subTask.getEpicId())) {
             uniqueTaskId++;
             SubTask newSubTask = new SubTask(uniqueTaskId, subTask.getName(), subTask.getDescription(),
@@ -79,7 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public  Map<Integer, Task> getListOfAllTasks () {
+    public  Map<Integer, Task> getListOfAllTasks() {
         Map<Integer, Task> listOfAllTasks = new LinkedHashMap<> ();
         listOfAllTasks.putAll(epicList);
         listOfAllTasks.putAll(taskList);
@@ -111,13 +109,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteAllEpics () {
+    public void deleteAllEpics() {
         subTaskList.clear();
         epicList.clear();
     }
 
     @Override
-    public void deleteAllSubTasks () {
+    public void deleteAllSubTasks() {
         for (Epic epic : epicList.values()) {
             epic.getSubTaskIdList().clear();
             epic.setStatus(Status.NEW);
@@ -253,38 +251,229 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void setTaskAndSubTaskStartDateTime (Task task, String startDateTime) {
-
+    public void setTaskAndSubTaskStartDateTime(Task task, String startDateTime) {
+        if (task != null & startDateTime != null) {
+            LocalDateTime dateTimeFromSting = LocalDateTime.parse(startDateTime, dateTimeFormatter);
+            if (!dateTimeFromSting.isAfter(LocalDateTime.now())) {
+                try {
+                    throw new ManagerDateTimeException ("Вы указали прошедшее время");
+                } catch (ManagerDateTimeException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                }
+            }
+            if (checkIsStartTimeFree(dateTimeFromSting)) {
+                switch (task.getTypeTask()) {
+                    case TASK : {
+                        task.setStartTime(dateTimeFromSting);
+                        updateTaskByNewTask(task);
+                    }
+                    case SUBTASK : {
+                        SubTask subTask = (SubTask) task;
+                        subTask.setStartTime(dateTimeFromSting);
+                        updateSubTaskByNewSubTask(subTask);
+                    }
+                    default : {
+                        try {
+                            throw new ManagerDateTimeException("Время для задач типа Epic определяется временем "
+                                    + "их подзадач");
+                        } catch (ManagerDateTimeException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
-    public void setTaskAndSubTaskDuration (Task task, int durationInMinutes) {
-
+    public void setTaskAndSubTaskDuration(Task task, int durationInMinutes) {
+        if (task != null) {
+            if (durationInMinutes < 1) {
+                try {
+                    throw new ManagerDateTimeException("Продолжительность задачи должна быть более 0 минут");
+                } catch (ManagerDateTimeException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                }
+            }
+            if (getStartDateTime(task) == null) {
+                try {
+                    throw new ManagerDateTimeException("В первую очередь установите время начала задачи");
+                } catch (ManagerDateTimeException e) {
+                    System.out.println(e.getMessage());
+                    return;
+                }
+            }
+            if (checkIsDurationFree(task.getStartTime(), durationInMinutes)) {
+                switch (task.getTypeTask()) {
+                    case TASK : {
+                        task.setDuration(durationInMinutes);
+                        updateTaskByNewTask(task);
+                    }
+                    case SUBTASK : {
+                        SubTask subTask = (SubTask) task;
+                        subTask.setDuration(durationInMinutes);
+                        updateSubTaskByNewSubTask(subTask);
+                    }
+                    default : {
+                        try {
+                            throw new ManagerDateTimeException("Время для задач типа Epic определяется временем "
+                                    + "их подзадач");
+                        } catch (ManagerDateTimeException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
-    public LocalDateTime getStartDateTime (Task task) {
-        return null;
+    public LocalDateTime getStartDateTime(Task task) {
+        return task.getStartTime();
     }
 
     @Override
-    public void setEpicDuration (int epicId) {
-
+    public void setEpicDuration(int epicId) {
+        int duration = 0;
+        if (epicList.containsKey(epicId)) {
+            Epic epicForUpdate = epicList.get(epicId);
+            List<Integer> epicSubTaskList = epicForUpdate.getSubTaskIdList();
+            if (epicSubTaskList.size() == 0) {
+                epicForUpdate.setDuration(duration);
+            } else if (epicSubTaskList.size() == 1) {
+                duration = subTaskList.get(epicSubTaskList.get(0)).getDuration();
+                epicForUpdate.setDuration(duration);
+            } else {
+                if (epicSubTaskList.stream().anyMatch(id -> (subTaskList.get(id).getStartTime() == null)
+                        || (subTaskList.get(id).getDuration() == 0))) {
+                    epicForUpdate.setDuration(duration);
+                } else {
+                    SubTask lastSubTask = subTaskList.get(epicSubTaskList.get(0));
+                    for (int i = 1; i < epicSubTaskList.size(); i++) {
+                        if (subTaskList.get(epicSubTaskList.get(i)).getStartTime().
+                                isAfter(lastSubTask.getStartTime())) {
+                            lastSubTask = subTaskList.get(epicSubTaskList.get(i));
+                        }
+                    }
+                    LocalDateTime endDateTimeOfLastSubTask = lastSubTask.getStartTime().
+                            plus( Duration.ofMinutes(lastSubTask.getDuration()));
+                    Duration epicDuration = Duration.between(epicForUpdate.getStartTime(), endDateTimeOfLastSubTask);
+                    epicForUpdate.setDuration((int) epicDuration.toMinutes());
+                    updateEpicByNewEpic(epicForUpdate);
+                }
+            }
+        }
     }
 
     @Override
-    public void setEpicStartDateTime (int epicId) {
-
+    public void setEpicStartDateTime(int epicId) {
+        if (epicList.containsKey(epicId)) {
+            Epic epicForUpdate = epicList.get(epicId);
+            if (epicForUpdate.getSubTaskIdList().size() == 1) {
+                LocalDateTime dateTime = subTaskList.get(epicForUpdate.getSubTaskIdList().get(0)).getStartTime();
+                epicForUpdate.setStartTime(dateTime);
+            } else if (epicForUpdate.getSubTaskIdList().size() > 1) {
+                Optional<LocalDateTime> optionalEarliestTime = epicForUpdate.getSubTaskIdList().stream()
+                        .filter(id -> subTaskList.get(id).getStartTime() != null)
+                        .map(id -> subTaskList.get(id).getStartTime())
+                        .reduce((startTime1, startTime2) -> startTime1.isBefore(startTime2) ? startTime1 : startTime2);
+                if (optionalEarliestTime.isPresent()) {
+                    epicForUpdate.setStartTime(optionalEarliestTime.get());
+                } else {
+                    epicForUpdate.setStartTime(null);
+                }
+                updateEpicByNewEpic(epicForUpdate);
+            }
+        }
     }
 
     @Override
-    public int getTaskDuration (Task task) {
-        return 0;
+    public int getTaskDuration(Task task) {
+        return task.getDuration();
     }
 
     @Override
-    public List<Task> getPrioritizedTasks () {
-        return null;
+    public List<Task> getPrioritizedTasks() {
+        List<Task> tasksWithoutStartDateTime = new ArrayList<> ();
+        List<Task> prioritizedListOfAllTasks = getListOfAllTasks().values().stream().peek((Task task) -> {
+            if (task.getStartTime() == null) {
+                tasksWithoutStartDateTime.add(task);
+            }
+        }).filter(task -> task.getStartTime() != null).sorted((Task task1, Task task2) -> {
+            if (task1.getStartTime().isEqual(task2.getStartTime())) {
+                return 0;
+            } else if (task1.getStartTime().isBefore(task2.getStartTime())) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }).collect(Collectors.toList());
+        prioritizedListOfAllTasks.addAll(tasksWithoutStartDateTime);
+        return prioritizedListOfAllTasks;
+    }
+
+    public boolean checkIsStartTimeFree(LocalDateTime startTime) {
+        boolean isStartTimeFree = true;
+        if (getListOfAllTasks().size() == 1) {
+            return isStartTimeFree;
+        } else {
+            for (Task task : getListOfAllTasks().values()) {
+                if ((!task.getTypeTask().equals( TypeTask.EPIC)) & getStartDateTime(task) != null) {
+                    if (getTaskDuration(task) == 0) {
+                        if (startTime.isEqual(getStartDateTime(task))) {
+                            isStartTimeFree = false;
+                            try {
+                                throw new ManagerDateTimeException("Время начала задачи пересекается с ранее "
+                                        + "запланированной задачей " + task.getId());
+                            } catch (ManagerDateTimeException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    } else {
+                        if ((startTime.isEqual(getStartDateTime(task)) || (startTime.isAfter(getStartDateTime(task)))
+                                & ((startTime.isEqual(getStartDateTime(task)
+                                .plus(Duration.ofMinutes(task.getDuration()))))
+                                || startTime.isBefore(getStartDateTime(task)
+                                                .plus(Duration.ofMinutes(task.getDuration())))))) {
+                            isStartTimeFree = false;
+                            try {
+                                throw new ManagerDateTimeException("Время начала задачи пересекается с ранее "
+                                        + "запланированной задачей " + task.getId());
+                            } catch (ManagerDateTimeException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    }
+                }
+            }
+            return isStartTimeFree;
+        }
+    }
+
+    public boolean checkIsDurationFree(LocalDateTime startTime, int duration) {
+        boolean isDurationFree = true;
+        if (getListOfAllTasks().size() == 1) {
+            return isDurationFree;
+        } else {
+            for (Task task : getListOfAllTasks().values()) {
+                if ((!task.getTypeTask().equals(TypeTask.EPIC)) & getStartDateTime(task) != null
+                        & getTaskDuration(task) != 0) {
+                    if (startTime.isBefore(task.getStartTime().plus(Duration.ofMinutes(task.getDuration())))
+                            & startTime.plus(Duration.ofMinutes(duration)).isAfter(task.getStartTime())) {
+                        isDurationFree = false;
+                        try {
+                            throw new ManagerDateTimeException("Время отведённое на  выполнение задачи пересекается "
+                                    + "с " + "ранее " + "запланированной задачей " + task.getId());
+                        } catch (ManagerDateTimeException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+            return isDurationFree;
+        }
     }
 
     protected Status checkEpicStatus(List<Integer> subTaskIdList) {

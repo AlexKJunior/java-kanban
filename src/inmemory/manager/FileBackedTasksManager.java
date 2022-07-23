@@ -117,7 +117,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private String tasksToString (Task task) {
         StringBuilder stringOfTask = new StringBuilder();
-        switch (task.getType()) {
+        switch (task.getTypeTask()) {
             case TASK :
                 stringOfTask.append(task.getId()).append(',')
                     .append(TypeTask.TASK).append(',')

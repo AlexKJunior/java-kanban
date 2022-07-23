@@ -9,6 +9,7 @@ public class SubTask extends Task {
         super(id, name, description );
         this.epicId = epicId;
     }
+
     public int getEpicId() {
         return epicId;
     }
@@ -18,7 +19,7 @@ public class SubTask extends Task {
     }
 
     @Override
-    public TypeTask getType() {
+    public TypeTask getTypeTask() {
         return  TypeTask.SUBTASK;
     }
 
