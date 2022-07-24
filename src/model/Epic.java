@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class Epic extends Task {
-    protected LocalDateTime EndTime;
-    private final List<Integer> subTaskIdList= new ArrayList<> ();
+    protected LocalDateTime endTime;
+     ArrayList<Integer> subTaskIdList;
 
-    public Epic(int id, String name, String description) {
-        super(id, name, description );
+    public Epic (int id, String name, String description) {
+        super (id, name, description);
+    }
+
+    public void setSubtaskIDList(ArrayList<Integer> subTaskIdList) {
+        this.subTaskIdList = new ArrayList<>();
     }
 
     public LocalDateTime getEndTime() {
@@ -29,32 +33,28 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "Epic{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
+                "endTime=" + endTime +
                 ", subTaskIdList=" + subTaskIdList +
                 '}';
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals (Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (o == null || getClass () != o.getClass ())
+            return false;
+        if (!super.equals ( o ))
+            return false;
         Epic epic = (Epic) o;
-        return Objects.equals(subTaskIdList, epic.subTaskIdList);
+        return Objects.equals ( endTime, epic.endTime ) && Objects.equals ( subTaskIdList, epic.subTaskIdList );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), subTaskIdList);
+        return Objects.hash ( super.hashCode (), endTime, subTaskIdList );
     }
 
-    public boolean updateSubTaskIdList () {
+    public boolean updateSubTaskIdList() {
         return false;
-    }
-
-    public void add (int id) {
     }
 }

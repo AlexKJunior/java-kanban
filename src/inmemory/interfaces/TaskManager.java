@@ -1,9 +1,10 @@
-package inmemory.intrface;
+package inmemory.interfaces;
 
 import model.Epic;
 import model.SubTask;
 import model.Task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public interface TaskManager {
 
     void setEpicStartDateTime(int epicId);
 
-    int getTaskDuration(Task task);
+    Duration getTaskDuration(Task task);
 
     List<Task> getPrioritizedTasks();
 }

@@ -3,12 +3,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import inmemory.Managers;
-import inmemory.intrface.TaskManager;
+import inmemory.interfaces.TaskManager;
 import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ class TaskManagerTest {
         testTask.setDescription("newDescription");
         testTask.setStatus(Status.IN_PROGRESS);
         testTask.setStartTime(LocalDateTime.parse("10.09.2022 12:43", dateTimeFormatter));
-        testTask.setDuration(90);
+        testTask.setDuration(Duration.ofDays(90));
         Task updatedTestTask = fileBackedTasksManager.updateTaskByNewTask(testTask);
         assertEquals(testTask, updatedTestTask, "Task не обновился.");
         assertEquals(updatedTestTask.getName(), "newName", "Имя Task не обновилось.");
@@ -114,7 +115,7 @@ class TaskManagerTest {
         testTask.setDescription("newDescription");
         testTask.setStatus(Status.IN_PROGRESS);
         testTask.setStartTime(LocalDateTime.parse("10.09.2022 12:43", dateTimeFormatter));
-        testTask.setDuration(90);
+        testTask.setDuration(Duration.ofDays(90));
         Task updatedTestTask = taskManager.updateTaskByNewTask(testTask);
         assertEquals(testTask, updatedTestTask, "Task не обновился.");
         assertEquals(updatedTestTask.getName(), "newName", "Имя Task не обновилось.");
@@ -297,7 +298,7 @@ class TaskManagerTest {
         testEpic.setDescription("newDescription");
         testEpic.setStatus(Status.IN_PROGRESS);
         testEpic.setStartTime(LocalDateTime.parse("10.09.2022 12:43", dateTimeFormatter));
-        testEpic.setDuration(90);
+        testEpic.setDuration(Duration.ofDays(90));
         Epic updatedTestEpic = fileBackedTasksManager.updateEpicByNewEpic(testEpic);
         assertEquals(testEpic, updatedTestEpic, "Epic не обновился.");
         assertEquals(updatedTestEpic.getName(), "newName", "Имя Epic не обновилось.");
@@ -431,7 +432,7 @@ class TaskManagerTest {
         testEpic.setDescription("newDescription");
         testEpic.setStatus(Status.IN_PROGRESS);
         testEpic.setStartTime(LocalDateTime.parse("10.09.2022 12:43", dateTimeFormatter));
-        testEpic.setDuration(90);
+        testEpic.setDuration(Duration.ofDays(90));
         Epic updatedTestEpic = taskManager.updateEpicByNewEpic(testEpic);
         assertEquals(testEpic, updatedTestEpic, "Epic не обновился.");
         assertEquals(updatedTestEpic.getName(), "newName", "Имя Epic не обновилось.");
@@ -496,7 +497,7 @@ class TaskManagerTest {
         testSubTask.setDescription("newDescription");
         testSubTask.setStatus(Status.IN_PROGRESS);
         testSubTask.setStartTime(LocalDateTime.parse("10.09.2022 12:43", dateTimeFormatter));
-        testSubTask.setDuration(90);
+        testSubTask.setDuration(Duration.ofDays(90));
         SubTask updatedTestSubTask = fileBackedTasksManager.updateSubTaskByNewSubTask(testSubTask);
         assertEquals(testSubTask, updatedTestSubTask, "SubTask не обновился.");
         assertEquals(updatedTestSubTask.getName(), "newName", "Имя SubTask не обновилось.");
@@ -628,7 +629,7 @@ class TaskManagerTest {
         testSubTask.setDescription("newDescription");
         testSubTask.setStatus(Status.IN_PROGRESS);
         testSubTask.setStartTime(LocalDateTime.parse("10.09.2023 12:43", dateTimeFormatter));
-        testSubTask.setDuration(90);
+        testSubTask.setDuration(Duration.ofDays(90));
         SubTask updatedTestSubTask = taskManager.updateSubTaskByNewSubTask(testSubTask);
         assertEquals(testSubTask, updatedTestSubTask, "SubTask не обновился.");
         assertEquals(updatedTestSubTask.getName(), "newName", "Имя SubTask не обновилось.");

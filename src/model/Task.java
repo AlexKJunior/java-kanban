@@ -1,5 +1,6 @@
 package model;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -8,21 +9,21 @@ public class Task {
     protected String name;
     protected String description;
     protected Status status;
-    protected int Duration;
+    protected Duration duration;
     protected LocalDateTime startTime;
 
-    public Task (int id, String name, String description) {
+    public Task(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public int getDuration() {
-        return Duration;
+    public Duration getDuration() {
+        return duration;
     }
 
-    public void setDuration(int duration) {
-        this.Duration = duration;
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public LocalDateTime getStartTime() {
@@ -70,28 +71,30 @@ public class Task {
     }
 
     @Override
-    public String toString () {
+    public String toString() {
         return "Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
-                ", Duration=" + Duration +
+                ", duration=" + duration +
                 ", startTime=" + startTime +
                 '}';
     }
+
     @Override
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass () != o.getClass ()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Duration == task.Duration && Objects.equals ( name, task.name ) &&
-                Objects.equals ( description, task.description ) &&
-                status == task.status && Objects.equals ( startTime, task.startTime );
+        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
+                && status == task.status && Objects.equals(duration, task.duration)
+                && Objects.equals(startTime, task.startTime);
     }
 
     @Override
-    public int hashCode () {
-        return Objects.hash ( id, name, description, status, Duration, startTime );
+    public int hashCode() {
+        return Objects.hash(id, name, description, status, duration, startTime);
     }
 }
+

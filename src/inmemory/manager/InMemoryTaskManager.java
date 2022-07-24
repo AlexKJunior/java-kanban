@@ -2,8 +2,8 @@ package inmemory.manager;
 
 import exceptions.ManagerDateTimeException;
 import inmemory.Managers;
-import inmemory.intrface.HistoryManager;
-import inmemory.intrface.TaskManager;
+import inmemory.interfaces.HistoryManager;
+import inmemory.interfaces.TaskManager;
 import model.*;
 
 import java.time.Duration;
@@ -56,7 +56,6 @@ public class InMemoryTaskManager implements TaskManager {
         subTaskList.put(uniqueTaskId, subTask);
         Epic updateStatusEpic = epicList.get(subTask.getEpicId());
         updateStatusEpic.getSubTaskIdList().add(subTask.getId());
-        updateStatusEpic.add(subTask.getId());
         return subTask;
     }
 
@@ -308,12 +307,12 @@ public class InMemoryTaskManager implements TaskManager {
             if (checkIsDurationFree(task.getStartTime(), durationInMinutes)) {
                 switch (task.getTypeTask()) {
                     case TASK : {
-                        task.setDuration(durationInMinutes);
+                        task.setDuration(Duration.ofDays(durationInMinutes));
                         updateTaskByNewTask(task);
                     }
                     case SUBTASK : {
                         SubTask subTask = (SubTask) task;
-                        subTask.setDuration(durationInMinutes);
+                        subTask.setDuration(Duration.ofDays(durationInMinutes));
                         updateSubTaskByNewSubTask(subTask);
                     }
                     default : {
@@ -336,7 +335,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setEpicDuration(int epicId) {
-        int duration = 0;
+        Duration duration = Duration.ofDays(0);
         if (epicList.containsKey(epicId)) {
             Epic epicForUpdate = epicList.get(epicId);
             List<Integer> epicSubTaskList = epicForUpdate.getSubTaskIdList();
@@ -346,8 +345,7 @@ public class InMemoryTaskManager implements TaskManager {
                 duration = subTaskList.get(epicSubTaskList.get(0)).getDuration();
                 epicForUpdate.setDuration(duration);
             } else {
-                if (epicSubTaskList.stream().anyMatch(id -> (subTaskList.get(id).getStartTime() == null)
-                        || (subTaskList.get(id).getDuration() == 0))) {
+                if (epicSubTaskList.stream().anyMatch(id -> (subTaskList.get(id).getStartTime() == null))) {
                     epicForUpdate.setDuration(duration);
                 } else {
                     SubTask lastSubTask = subTaskList.get(epicSubTaskList.get(0));
@@ -358,9 +356,9 @@ public class InMemoryTaskManager implements TaskManager {
                         }
                     }
                     LocalDateTime endDateTimeOfLastSubTask = lastSubTask.getStartTime().
-                            plus( Duration.ofMinutes(lastSubTask.getDuration()));
+                            plus(lastSubTask.getDuration());
                     Duration epicDuration = Duration.between(epicForUpdate.getStartTime(), endDateTimeOfLastSubTask);
-                    epicForUpdate.setDuration((int) epicDuration.toMinutes());
+                    epicForUpdate.setDuration(Duration.ofDays((int) epicDuration.toMinutes()));
                     updateEpicByNewEpic(epicForUpdate);
                 }
             }
@@ -390,18 +388,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int getTaskDuration(Task task) {
-        return task.getDuration();
+    public Duration getTaskDuration(Task task) {
+        return  task.getDuration();
     }
 
     @Override
     public List<Task> getPrioritizedTasks() {
         List<Task> tasksWithoutStartDateTime = new ArrayList<> ();
-        List<Task> prioritizedListOfAllTasks = getListOfAllTasks().values().stream().peek((Task task) -> {
+        List<Task> prioritizedListOfAllTasks = getListOfAllTasks()
+                .values()
+                .stream()
+                .peek((Task task) -> {
             if (task.getStartTime() == null) {
                 tasksWithoutStartDateTime.add(task);
             }
-        }).filter(task -> task.getStartTime() != null).sorted((Task task1, Task task2) -> {
+        }).filter(task -> task.getStartTime() != null)
+                .sorted((Task task1, Task task2) -> {
             if (task1.getStartTime().isEqual(task2.getStartTime())) {
                 return 0;
             } else if (task1.getStartTime().isBefore(task2.getStartTime())) {
@@ -414,14 +416,13 @@ public class InMemoryTaskManager implements TaskManager {
         return prioritizedListOfAllTasks;
     }
 
-    public boolean checkIsStartTimeFree(LocalDateTime startTime) {
+    private boolean checkIsStartTimeFree(LocalDateTime startTime) {
         boolean isStartTimeFree = true;
         if (getListOfAllTasks().size() == 1) {
             return isStartTimeFree;
         } else {
             for (Task task : getListOfAllTasks().values()) {
                 if ((!task.getTypeTask().equals( TypeTask.EPIC)) & getStartDateTime(task) != null) {
-                    if (getTaskDuration(task) == 0) {
                         if (startTime.isEqual(getStartDateTime(task))) {
                             isStartTimeFree = false;
                             try {
@@ -434,9 +435,9 @@ public class InMemoryTaskManager implements TaskManager {
                     } else {
                         if ((startTime.isEqual(getStartDateTime(task)) || (startTime.isAfter(getStartDateTime(task)))
                                 & ((startTime.isEqual(getStartDateTime(task)
-                                .plus(Duration.ofMinutes(task.getDuration()))))
+                                .plus((task.getDuration()))))
                                 || startTime.isBefore(getStartDateTime(task)
-                                                .plus(Duration.ofMinutes(task.getDuration())))))) {
+                                                .plus((task.getDuration())))))) {
                             isStartTimeFree = false;
                             try {
                                 throw new ManagerDateTimeException("Время начала задачи пересекается с ранее "
@@ -450,18 +451,18 @@ public class InMemoryTaskManager implements TaskManager {
             }
             return isStartTimeFree;
         }
-    }
 
-    public boolean checkIsDurationFree(LocalDateTime startTime, int duration) {
+    private boolean checkIsDurationFree(LocalDateTime startTime, int duration) {
         boolean isDurationFree = true;
         if (getListOfAllTasks().size() == 1) {
             return isDurationFree;
         } else {
             for (Task task : getListOfAllTasks().values()) {
-                if ((!task.getTypeTask().equals(TypeTask.EPIC)) & getStartDateTime(task) != null
-                        & getTaskDuration(task) != 0) {
-                    if (startTime.isBefore(task.getStartTime().plus(Duration.ofMinutes(task.getDuration())))
-                            & startTime.plus(Duration.ofMinutes(duration)).isAfter(task.getStartTime())) {
+                if ((!task.getTypeTask().equals(TypeTask.EPIC)) & getStartDateTime(task) != null) {
+                    if (startTime.isBefore(task.getStartTime()
+                            .plus((task.getDuration())))
+                            & startTime.plus(Duration.ofMinutes(duration))
+                            .isAfter(task.getStartTime())) {
                         isDurationFree = false;
                         try {
                             throw new ManagerDateTimeException("Время отведённое на  выполнение задачи пересекается "

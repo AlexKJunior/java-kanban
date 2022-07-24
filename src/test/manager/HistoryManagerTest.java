@@ -1,7 +1,7 @@
 package test.manager;
 
 import inmemory.Managers;
-import inmemory.intrface.TaskManager;
+import inmemory.interfaces.TaskManager;
 import model.Epic;
 import model.SubTask;
 import model.Task;

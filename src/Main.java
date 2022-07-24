@@ -1,5 +1,5 @@
 import inmemory.Managers;
-import inmemory.intrface.TaskManager;
+import inmemory.interfaces.TaskManager;
 import inmemory.manager.FileBackedTasksManager;
 import model.Epic;
 import model.SubTask;
