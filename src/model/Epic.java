@@ -7,13 +7,13 @@ import java.util.Objects;
 
 public class Epic extends Task {
     protected LocalDateTime endTime;
-     ArrayList<Integer> subTaskIdList;
+    private ArrayList<Integer> subTaskIdList;
 
-    public Epic (int id, String name, String description) {
-        super (id, name, description);
+    public Epic(int id, String name, String description) {
+        super(id, name, description);
     }
 
-    public void setSubtaskIDList(ArrayList<Integer> subTaskIdList) {
+    public void setSubTaskIdList(ArrayList<Integer> subTaskIdList) {
         this.subTaskIdList = new ArrayList<>();
     }
 
@@ -39,19 +39,19 @@ public class Epic extends Task {
     }
 
     @Override
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass () != o.getClass ())
+        if (o == null || getClass() != o.getClass())
             return false;
-        if (!super.equals ( o ))
+        if (!super.equals(o))
             return false;
         Epic epic = (Epic) o;
-        return Objects.equals ( endTime, epic.endTime ) && Objects.equals ( subTaskIdList, epic.subTaskIdList );
+        return Objects.equals(endTime, epic.endTime) && Objects.equals(subTaskIdList, epic.subTaskIdList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash ( super.hashCode (), endTime, subTaskIdList );
+        return Objects.hash(super.hashCode(), endTime, subTaskIdList);
     }
 
     public boolean updateSubTaskIdList() {

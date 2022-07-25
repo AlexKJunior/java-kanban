@@ -6,7 +6,7 @@ public class SubTask extends Task {
     private int epicId;
 
     public SubTask(int id, String name, String description, int epicId) {
-        super(id, name, description );
+        super(id, name, description);
         this.epicId = epicId;
     }
 
@@ -20,7 +20,7 @@ public class SubTask extends Task {
 
     @Override
     public TypeTask getTypeTask() {
-        return  TypeTask.SUBTASK;
+        return TypeTask.SUBTASK;
     }
 
     @Override

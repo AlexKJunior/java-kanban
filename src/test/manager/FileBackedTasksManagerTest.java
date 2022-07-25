@@ -6,7 +6,7 @@ import inmemory.interfaces.TaskManager;
 import java.io.File;
 
 class FileBackedTasksManagerTest extends TaskManagerTest {
-    TaskManager manager = new FileBackedTasksManager( new File ( "resources/task.csv" ));
+    TaskManager manager = new FileBackedTasksManager(new File("resources/task.csv"));
 
     TaskManager createManager() {
         return manager;

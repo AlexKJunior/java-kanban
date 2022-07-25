@@ -45,10 +45,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void clear () {
-        Node head = new Node(null,null,null);
+    public void clear() {
+        Node head = new Node(null, null, null);
         Node tail = head;
-       mapNode.clear();
+        mapNode.clear();
     }
 
     private Node<Task> linkLast(Task task) {

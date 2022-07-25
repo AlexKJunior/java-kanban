@@ -1,4 +1,5 @@
 package test.manager;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -427,7 +428,7 @@ class TaskManagerTest {
     @Test
     void shouldUpdateEpicInTasksManager() {
         Epic testEpic = taskManager.creationOfEpic(new Epic(10, "testEpic", "testEpic1 description"
-               ));
+        ));
         testEpic.setName("newName");
         testEpic.setDescription("newDescription");
         testEpic.setStatus(Status.IN_PROGRESS);
@@ -513,7 +514,7 @@ class TaskManagerTest {
 
         testSubTask = fileBackedTasksManager.creationOfSubTask(new SubTask(10, "testSubTask1",
                 "testSubTask1 description", testEpic1.getId()));
-        testSubTask. setEpicId(Integer.MAX_VALUE);
+        testSubTask.setEpicId(Integer.MAX_VALUE);
         updatedTestSubTask = fileBackedTasksManager.updateSubTaskByNewSubTask(testSubTask);
         assertNull(updatedTestSubTask, "Прошло обновление SubTask на SubTask не хранящийся в listOfSubTask.");
 

@@ -76,8 +76,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public  Map<Integer, Task> getListOfAllTasks() {
-        Map<Integer, Task> listOfAllTasks = new LinkedHashMap<> ();
+    public Map<Integer, Task> getListOfAllTasks() {
+        Map<Integer, Task> listOfAllTasks = new LinkedHashMap<>();
         listOfAllTasks.putAll(epicList);
         listOfAllTasks.putAll(taskList);
         listOfAllTasks.putAll(subTaskList);
@@ -255,7 +255,7 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime dateTimeFromSting = LocalDateTime.parse(startDateTime, dateTimeFormatter);
             if (!dateTimeFromSting.isAfter(LocalDateTime.now())) {
                 try {
-                    throw new ManagerDateTimeException ("Вы указали прошедшее время");
+                    throw new ManagerDateTimeException("Вы указали прошедшее время");
                 } catch (ManagerDateTimeException e) {
                     System.out.println(e.getMessage());
                     return;
@@ -263,16 +263,16 @@ public class InMemoryTaskManager implements TaskManager {
             }
             if (checkIsStartTimeFree(dateTimeFromSting)) {
                 switch (task.getTypeTask()) {
-                    case TASK : {
+                    case TASK: {
                         task.setStartTime(dateTimeFromSting);
                         updateTaskByNewTask(task);
                     }
-                    case SUBTASK : {
+                    case SUBTASK: {
                         SubTask subTask = (SubTask) task;
                         subTask.setStartTime(dateTimeFromSting);
                         updateSubTaskByNewSubTask(subTask);
                     }
-                    default : {
+                    default: {
                         try {
                             throw new ManagerDateTimeException("Время для задач типа Epic определяется временем "
                                     + "их подзадач");
@@ -306,16 +306,16 @@ public class InMemoryTaskManager implements TaskManager {
             }
             if (checkIsDurationFree(task.getStartTime(), durationInMinutes)) {
                 switch (task.getTypeTask()) {
-                    case TASK : {
+                    case TASK: {
                         task.setDuration(Duration.ofDays(durationInMinutes));
                         updateTaskByNewTask(task);
                     }
-                    case SUBTASK : {
+                    case SUBTASK: {
                         SubTask subTask = (SubTask) task;
                         subTask.setDuration(Duration.ofDays(durationInMinutes));
                         updateSubTaskByNewSubTask(subTask);
                     }
-                    default : {
+                    default: {
                         try {
                             throw new ManagerDateTimeException("Время для задач типа Epic определяется временем "
                                     + "их подзадач");
@@ -389,29 +389,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Duration getTaskDuration(Task task) {
-        return  task.getDuration();
+        return task.getDuration();
     }
 
     @Override
     public List<Task> getPrioritizedTasks() {
-        List<Task> tasksWithoutStartDateTime = new ArrayList<> ();
+        List<Task> tasksWithoutStartDateTime = new ArrayList<>();
         List<Task> prioritizedListOfAllTasks = getListOfAllTasks()
                 .values()
                 .stream()
                 .peek((Task task) -> {
-            if (task.getStartTime() == null) {
-                tasksWithoutStartDateTime.add(task);
-            }
-        }).filter(task -> task.getStartTime() != null)
+                    if (task.getStartTime() == null) {
+                        tasksWithoutStartDateTime.add(task);
+                    }
+                }).filter(task -> task.getStartTime() != null)
                 .sorted((Task task1, Task task2) -> {
-            if (task1.getStartTime().isEqual(task2.getStartTime())) {
-                return 0;
-            } else if (task1.getStartTime().isBefore(task2.getStartTime())) {
-                return -1;
-            } else {
-                return 1;
-            }
-        }).collect(Collectors.toList());
+                    if (task1.getStartTime().isEqual(task2.getStartTime())) {
+                        return 0;
+                    } else if (task1.getStartTime().isBefore(task2.getStartTime())) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }).collect(Collectors.toList());
         prioritizedListOfAllTasks.addAll(tasksWithoutStartDateTime);
         return prioritizedListOfAllTasks;
     }
@@ -422,35 +422,35 @@ public class InMemoryTaskManager implements TaskManager {
             return isStartTimeFree;
         } else {
             for (Task task : getListOfAllTasks().values()) {
-                if ((!task.getTypeTask().equals( TypeTask.EPIC)) & getStartDateTime(task) != null) {
-                        if (startTime.isEqual(getStartDateTime(task))) {
-                            isStartTimeFree = false;
-                            try {
-                                throw new ManagerDateTimeException("Время начала задачи пересекается с ранее "
-                                        + "запланированной задачей " + task.getId());
-                            } catch (ManagerDateTimeException e) {
-                                System.out.println(e.getMessage());
-                            }
+                if ((!task.getTypeTask().equals(TypeTask.EPIC)) & getStartDateTime(task) != null) {
+                    if (startTime.isEqual(getStartDateTime(task))) {
+                        isStartTimeFree = false;
+                        try {
+                            new ManagerDateTimeException("Время начала задачи пересекается с ранее "
+                                    + "запланированной задачей " + task.getId());
+                        } catch (ManagerDateTimeException e) {
+                            System.out.println(e.getMessage());
                         }
-                    } else {
-                        if ((startTime.isEqual(getStartDateTime(task)) || (startTime.isAfter(getStartDateTime(task)))
-                                & ((startTime.isEqual(getStartDateTime(task)
-                                .plus((task.getDuration()))))
-                                || startTime.isBefore(getStartDateTime(task)
-                                                .plus((task.getDuration())))))) {
-                            isStartTimeFree = false;
-                            try {
-                                throw new ManagerDateTimeException("Время начала задачи пересекается с ранее "
-                                        + "запланированной задачей " + task.getId());
-                            } catch (ManagerDateTimeException e) {
-                                System.out.println(e.getMessage());
-                            }
+                    }
+                } else {
+                    if ((startTime.isEqual(getStartDateTime(task)) || (startTime.isAfter(getStartDateTime(task)))
+                            & ((startTime.isEqual(getStartDateTime(task)
+                            .plus((task.getDuration()))))
+                            || startTime.isBefore(getStartDateTime(task)
+                            .plus((task.getDuration())))))) {
+                        isStartTimeFree = false;
+                        try {
+                            new ManagerDateTimeException("Время начала задачи пересекается с ранее "
+                                    + "запланированной задачей " + task.getId());
+                        } catch (ManagerDateTimeException e) {
+                            System.out.println(e.getMessage());
                         }
                     }
                 }
             }
-            return isStartTimeFree;
         }
+        return isStartTimeFree;
+    }
 
     private boolean checkIsDurationFree(LocalDateTime startTime, int duration) {
         boolean isDurationFree = true;
@@ -465,7 +465,7 @@ public class InMemoryTaskManager implements TaskManager {
                             .isAfter(task.getStartTime())) {
                         isDurationFree = false;
                         try {
-                            throw new ManagerDateTimeException("Время отведённое на  выполнение задачи пересекается "
+                            new ManagerDateTimeException("Время отведённое на  выполнение задачи пересекается "
                                     + "с " + "ранее " + "запланированной задачей " + task.getId());
                         } catch (ManagerDateTimeException e) {
                             System.out.println(e.getMessage());
