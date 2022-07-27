@@ -28,6 +28,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.subTaskList = new HashMap<>();
         this.epicList = new HashMap<>();
         this.historyManager = Managers.getDefaultHistory();
+        this.dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     }
 
     @Override

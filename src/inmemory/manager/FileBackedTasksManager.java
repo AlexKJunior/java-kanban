@@ -11,6 +11,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     private static int uniqueTaskId;
     public static final String HEAD = "id,type,name,status,description,epic\n";
 
+    public FileBackedTasksManager() {
+    }
+
     public static FileBackedTasksManager loadFromFile(File file) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
         if (Files.exists(file.toPath())) {
@@ -80,7 +83,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 + fileBackedTasksManager.getHistory());
     }
 
-    private final File saveFile;
+    private File saveFile;
 
     public FileBackedTasksManager(File saveFile) {
         this.saveFile = saveFile;
@@ -115,7 +118,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private String tasksToString(Task task) {
+    public String tasksToString(Task task) {
         StringBuilder stringOfTask = new StringBuilder();
         switch (task.getTypeTask()) {
             case TASK:
@@ -150,8 +153,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return stringOfTask.toString();
     }
 
-    private void tasksFromString(String stringOfTask) {
-
+    public void tasksFromString(String stringOfTask) {
         String[] words = stringOfTask.split(",");
         TypeTask typeTasks = TypeTask.valueOf(words[1]);
         int id = Integer.parseInt(words[0]);
@@ -160,7 +162,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
 
         switch (typeTasks) {
-
             case TASK:
                 Task task = new Task(id, words[2], words[4]);
                 task.setStatus(Status.valueOf(words[3]));
@@ -181,7 +182,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private String historyToString() {
+    public String historyToString() {
         StringBuilder historyOfViews = new StringBuilder("\n");
         for (Task task : getHistory()) {
             historyOfViews.append(task.getId()).append(',');
@@ -190,7 +191,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return historyOfViews.toString();
     }
 
-    private void historyFromString(String stringOfHistory) {
+    public void historyFromString(String stringOfHistory) {
         String[] words = stringOfHistory.split(",");
         for (String word : words) {
             if (getListOfAllTasks().get(Integer.parseInt(word)) != null) {
