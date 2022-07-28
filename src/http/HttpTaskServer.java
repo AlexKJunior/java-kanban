@@ -69,15 +69,12 @@ public class HttpTaskServer {
             default:
                 httpExchange.sendResponseHeaders(405, 0);
         }
-        try (OutputStream outputStream = httpExchange.getResponseBody()) {
-            outputStream.write(response.getBytes());
+        OutputStream outputStream = httpExchange.getResponseBody();
+        outputStream.write(response.getBytes());
+        try {
+            httpExchange.sendResponseHeaders(500, 0);
         } catch (IOException e) {
-            System.out.println("IOException в методе tasksHandler()\n" + e.getMessage());
-            try {
-                httpExchange.sendResponseHeaders(500, 0);
-            } catch (IOException ex) {
-                System.out.println("Ошибка отправки данных метода tasksHandler()\n" + e.getMessage());
-            }
+            System.out.println("Ошибка отправки данных метода tasksHandler()\n" + e.getMessage());
         }
     }
 

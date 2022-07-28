@@ -28,7 +28,7 @@ public class KVTaskClient {
         } catch (IOException e) {
             throw new KVTaskClientException("IOException в ходе работы метода put()");
         } catch (InterruptedException e) {
-            throw new KVTaskClientException("InterruptedException в ходе работы метода put()");
+            throw new KVTaskClientException("InterruptedException в ходе работы метода put()" + e.getMessage());
         }
     }
 

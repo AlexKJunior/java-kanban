@@ -1,10 +1,9 @@
 package inmemory.manager;
 
+import com.google.gson.Gson;
 import exceptions.KVServerException;
 import exceptions.KVTaskClientException;
 import http.KVTaskClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.net.http.HttpResponse;
 
@@ -20,10 +19,9 @@ public class HTTPTasksManager extends FileBackedTasksManager {
         } catch (KVTaskClientException e) {
             System.out.println(e.getMessage());
         }
-        gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+        gson = new Gson();
         loadFromSave();
     }
-
 
     public void save() {
         try {
@@ -57,10 +55,9 @@ public class HTTPTasksManager extends FileBackedTasksManager {
                     throw new KVServerException("Code 500. Ошибка сохранения!");
             }
         } catch (KVServerException | KVTaskClientException e) {
-            System.out.println(e.getMessage());
+            System.out.println(" Ошибка сохранения в методе save()\n" + e.getMessage());
         }
     }
-
 
     public void loadFromSave() {
         try {
@@ -91,7 +88,7 @@ public class HTTPTasksManager extends FileBackedTasksManager {
                     throw new KVServerException("Code 500. Ошибка загрузки данных!");
             }
         } catch (KVServerException | KVTaskClientException e) {
-            System.out.println(e.getMessage());
+            System.out.println(" Ошибка загрузки данных в методе loadFromSave()\n" + e.getMessage());
         }
     }
 
