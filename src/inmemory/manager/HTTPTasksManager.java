@@ -9,18 +9,18 @@ import java.net.http.HttpResponse;
 
 public class HTTPTasksManager extends FileBackedTasksManager {
     private final String keyForSave;
-    private KVTaskClient kvTaskClient = null;
+    private KVTaskClient kvTaskClient;
     private final Gson gson;
 
     public HTTPTasksManager(String url, String keyForSave) {
         this.keyForSave = keyForSave;
+        gson = new Gson();
         try {
             kvTaskClient = new KVTaskClient(url);
-        } catch (KVTaskClientException e) {
+            loadFromSave();
+        } catch (KVServerException | KVTaskClientException e) {
             System.out.println(e.getMessage());
         }
-        gson = new Gson();
-        loadFromSave();
     }
 
     public void save() {
